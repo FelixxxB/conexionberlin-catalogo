@@ -1,3 +1,8 @@
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -7,12 +12,19 @@
   overflow: hidden;
   text-decoration: none;
   color: var(--text);
-  transition: border-color 0.15s, transform 0.15s;
+  transition: border-color 0.18s, transform 0.18s;
+  animation: fadeUp 0.28s ease-out both;
 }
 
 .card:hover {
   border-color: var(--brand);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+  }
 }
 
 .unavailable {
@@ -31,6 +43,11 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.card:hover .image {
+  transform: scale(1.07);
 }
 
 .imagePlaceholder {

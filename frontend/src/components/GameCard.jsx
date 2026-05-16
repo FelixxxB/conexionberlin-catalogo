@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styles from './GameCard.module.css'
 
-export default function GameCard({ game }) {
+export default function GameCard({ game, index = 0 }) {
   const [imgError, setImgError] = useState(false)
 
   const players =
@@ -15,12 +15,15 @@ export default function GameCard({ game }) {
 
   const time = game.playing_time ? `${game.playing_time} min` : null
 
+  const stagger = Math.min(index * 0.035, 0.42)
+
   return (
     <a
       href={game.detail_url}
       target="_blank"
       rel="noopener noreferrer"
       className={`${styles.card} ${!game.available ? styles.unavailable : ''}`}
+      style={{ animationDelay: `${stagger}s` }}
     >
       <div className={styles.imageWrap}>
         {!imgError && game.image_url ? (

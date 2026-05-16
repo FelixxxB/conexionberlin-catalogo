@@ -171,6 +171,58 @@
   text-align: center;
   padding: var(--space-7) var(--space-5);
   color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.emptyDice {
+  font-size: 2.5rem;
+  opacity: 0.5;
+}
+
+.emptyTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.emptyHint {
+  font-size: 0.83rem;
+}
+
+.emptyClear {
+  margin-top: var(--space-2);
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.8rem;
+  transition: all 0.15s;
+}
+
+.emptyClear:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.clearBtn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: var(--space-2);
+  padding: 3px var(--space-3);
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.clearBtn:hover {
+  border-color: var(--brand);
+  color: var(--brand);
 }
 
 .grid {

@@ -160,8 +160,13 @@ export default function App() {
         <main className={styles.main}>
           <div className={styles.resultsBar}>
             <span className={styles.resultCount}>
-              {loading ? 'Cargando...' : `${total.toLocaleString()} juegos`}
+              {loading ? 'Buscando juegos…' : `${total.toLocaleString()} juegos`}
             </span>
+            {activeFilterCount > 0 && !loading && (
+              <button className={styles.clearBtn} onClick={() => setFilters(DEFAULT_FILTERS)}>
+                Limpiar ×
+              </button>
+            )}
             {/* Mobile filter toggle */}
             <button
               className={styles.filterToggle}
@@ -181,13 +186,20 @@ export default function App() {
 
           {!loading && games.length === 0 && (
             <div className={styles.empty}>
-              <p>No se encontraron juegos con esos filtros.</p>
+              <div className={styles.emptyDice}>🎲</div>
+              <p className={styles.emptyTitle}>Ningún juego coincide</p>
+              <p className={styles.emptyHint}>Probá con menos filtros o jugá a la suerte</p>
+              {activeFilterCount > 0 && (
+                <button className={styles.emptyClear} onClick={() => setFilters(DEFAULT_FILTERS)}>
+                  Limpiar todos los filtros
+                </button>
+              )}
             </div>
           )}
 
           <div className={styles.grid}>
-            {games.map(game => (
-              <GameCard key={game.id} game={game} />
+            {games.map((game, i) => (
+              <GameCard key={game.id} game={game} index={i} />
             ))}
           </div>
 

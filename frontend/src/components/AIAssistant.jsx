@@ -76,7 +76,8 @@ export default function AIAssistant({ onClose }) {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/ai/query', {
+      const API = import.meta.env.VITE_API_URL || ''
+      const res = await fetch(`${API}/api/ai/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text }),

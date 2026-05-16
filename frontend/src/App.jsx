@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+
+const API = import.meta.env.VITE_API_URL || ''
 import GameCard from './components/GameCard'
 import Filters from './components/Filters'
 import AIAssistant from './components/AIAssistant'
@@ -47,7 +49,7 @@ export default function App() {
     params.set('offset', off)
 
     try {
-      const res = await fetch(`/api/games?${params}`)
+      const res = await fetch(`${API}/api/games?${params}`)
       const data = await res.json()
       setGames(data.games)
       setTotal(data.total)
@@ -59,7 +61,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    fetch('/api/stats').then(r => r.json()).then(setStats).catch(() => {})
+    fetch(`${API}/api/stats`).then(r => r.json()).then(setStats).catch(() => {})
   }, [])
 
   useEffect(() => {

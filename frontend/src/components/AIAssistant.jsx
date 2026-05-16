@@ -21,8 +21,12 @@ function buildCatalogContext(allGames) {
     else if (g.players_min) p = `${g.players_min}j+`
     const t = g.playing_time ? `${g.playing_time}min` : ''
     const exp = g.expansion ? ' [exp]' : ''
-    lines.push(`- ${g.title} (${p}, ${t}${exp})`)
-    if (lines.length >= 500) break
+    const weight = g.bgg_weight ? ` complejidad:${g.bgg_weight.toFixed(1)}` : ''
+    const tags = g.tags?.length ? ` [${g.tags.join(', ')}]` : ''
+    const author = g.authors?.length ? ` autor:${g.authors[0]}` : ''
+    const year = g.year ? ` ${g.year}` : ''
+    lines.push(`- ${g.title} (${p}, ${t}${exp}${weight}${author}${year}${tags})`)
+    if (lines.length >= 600) break
   }
   return lines.join('\n')
 }
@@ -134,8 +138,12 @@ export default function AIAssistant({ onClose, allGames = [] }) {
       const systemPrompt = `Eres un experto en juegos de mesa del café Conexión Berlín en Buenos Aires.
 Ayudás a los clientes a encontrar juegos de mesa según sus preferencias.
 
-El catálogo de juegos disponibles (formato: nombre, jugadores, tiempo, [exp]=expansión):
+El catálogo de juegos disponibles:
+Formato: nombre (jugadores, tiempo, [exp]=expansión, complejidad 1-5, autor, año, [tags])
 ${catalogText}
+
+Tags comunes: cooperativo, estrategia, familia, cartas, dados, inicial, party, temático, abstracto, económico, deckbuilding, worker-placement, entre otros.
+Complejidad: 1=muy fácil, 2=fácil, 3=medio, 4=difícil, 5=muy difícil.
 
 INSTRUCCIONES DE RESPUESTA:
 Respondé SIEMPRE con un objeto JSON válido con esta estructura exacta:
@@ -149,6 +157,7 @@ Respondé SIEMPRE con un objeto JSON válido con esta estructura exacta:
 
 Reglas:
 - Sugerí 3-6 juegos que mejor se ajusten al pedido
+- Usá los tags, la complejidad y el autor para hacer mejores recomendaciones
 - Solo recomendá juegos del catálogo
 - Si el usuario hace pregunta general, respondé sin recomendaciones`
 

@@ -4,6 +4,7 @@
   flex-direction: column;
 }
 
+/* ─── Header ─────────────────────────────── */
 .header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -15,110 +16,113 @@
 .headerInner {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 14px 24px;
+  padding: var(--space-3) var(--space-6);
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: var(--space-5);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
   flex: 1;
   min-width: 0;
 }
 
 .brandDot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--brand);
   flex-shrink: 0;
 }
 
 .title {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
   color: var(--text);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   white-space: nowrap;
 }
 
 .subtitle {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
+  letter-spacing: 0.01em;
 }
 
 .stats {
   display: flex;
-  gap: 24px;
+  gap: var(--space-5);
+  flex-shrink: 0;
 }
 
 .stat {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1px;
 }
 
 .statNum {
   font-size: 1rem;
   font-weight: 700;
   color: var(--brand);
+  line-height: 1.1;
 }
 
 .statLabel {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.07em;
 }
 
 .aiToggle {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  font-weight: 500;
+  gap: var(--space-2);
+  background: var(--brand);
+  border: none;
+  color: #fff;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.82rem;
+  font-weight: 600;
   white-space: nowrap;
-  transition: all 0.15s;
+  transition: background 0.15s;
   flex-shrink: 0;
 }
 
 .aiToggle:hover {
-  border-color: var(--brand);
-  color: var(--brand);
+  background: var(--brand-dark);
 }
 
 .aiToggleActive {
-  background: var(--brand);
-  border-color: var(--brand);
-  color: #fff;
+  background: var(--brand-dark);
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 
 .aiToggleActive:hover {
   background: var(--brand-dark);
-  color: #fff;
 }
 
-/* Body */
+/* ─── Body ───────────────────────────────── */
 .body {
   flex: 1;
   display: flex;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
-  padding: 24px;
-  gap: 24px;
+  padding: var(--space-6);
+  gap: var(--space-6);
 }
 
 .sidebar {
-  width: 240px;
+  width: 272px;
   flex-shrink: 0;
 }
 
@@ -127,17 +131,19 @@
   min-width: 0;
 }
 
+/* ─── Results bar ────────────────────────── */
 .resultsBar {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .resultCount {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
+  font-weight: 500;
 }
 
 /* Mobile filter toggle — hidden on desktop */
@@ -149,10 +155,10 @@
   background: var(--brand);
   color: #fff;
   border-radius: 999px;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  padding: 1px 6px;
-  margin: 0 2px;
+  padding: 1px 5px;
+  margin: 0 var(--space-1);
 }
 
 /* Mobile filters drawer — hidden on desktop */
@@ -160,25 +166,27 @@
   display: none;
 }
 
+/* ─── Grid ───────────────────────────────── */
 .empty {
   text-align: center;
-  padding: 80px 20px;
+  padding: var(--space-7) var(--space-5);
   color: var(--text-muted);
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 16px;
+  gap: var(--space-5);
 }
 
+/* ─── Pagination ─────────────────────────── */
 .pagination {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  margin-top: 40px;
-  padding-top: 24px;
+  gap: var(--space-4);
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
   border-top: 1px solid var(--border);
 }
 
@@ -186,9 +194,9 @@
   background: var(--surface-2);
   border: 1px solid var(--border);
   color: var(--text);
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 0.85rem;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.83rem;
   transition: all 0.15s;
 }
 
@@ -203,8 +211,10 @@
 }
 
 .pageInfo {
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   color: var(--text-muted);
+  min-width: 60px;
+  text-align: center;
 }
 
 /* Mobile bottom bar — hidden on desktop */
@@ -218,82 +228,80 @@
 
 /* ─── Mobile ──────────────────────────────── */
 @media (max-width: 768px) {
+  .header {
+    /* Push header content below iPhone notch */
+    padding-top: env(safe-area-inset-top);
+  }
+
   .headerInner {
-    padding: 12px 16px;
-    gap: 12px;
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-3);
   }
 
   .title {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .subtitle {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
   }
 
   .stats {
     display: none;
   }
 
-  /* Hide desktop AI button on mobile (bottom bar handles it) */
   .aiToggle {
     display: none;
   }
 
   .body {
     flex-direction: column;
-    padding: 12px 12px 0;
+    padding: var(--space-3) var(--space-3) 0;
     gap: 0;
   }
 
-  /* Hide desktop sidebar on mobile */
   .sidebar {
     display: none;
   }
 
   .resultsBar {
-    margin-bottom: 12px;
-  }
-
-  .resultCount {
-    font-size: 0.8rem;
+    margin-bottom: var(--space-3);
   }
 
   .filterToggle {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: var(--space-2);
     background: var(--surface-2);
     border: 1px solid var(--border);
     color: var(--text);
-    border-radius: 8px;
-    padding: 6px 12px;
+    border-radius: var(--space-2);
+    padding: var(--space-2) var(--space-3);
     font-size: 0.8rem;
     font-weight: 500;
-    cursor: pointer;
   }
 
   .mobileFilters {
     display: block;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
+    border-radius: var(--radius);
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
   }
 
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: var(--space-3);
   }
 
   .pagination {
-    gap: 10px;
-    margin-top: 24px;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
   }
 
   .pageBtn {
-    padding: 7px 12px;
+    padding: var(--space-2) var(--space-3);
     font-size: 0.8rem;
   }
 
@@ -307,9 +315,9 @@
     background: var(--surface);
     border-top: 1px solid var(--border);
     z-index: 200;
-    padding: 10px 16px;
-    padding-bottom: max(10px, env(safe-area-inset-bottom));
-    gap: 10px;
+    padding: var(--space-2) var(--space-4);
+    padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+    gap: var(--space-2);
   }
 
   .mobileBarBtn {
@@ -317,15 +325,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: var(--space-2);
     background: var(--surface-2);
     border: 1px solid var(--border);
     color: var(--text-muted);
-    border-radius: 10px;
-    padding: 10px;
-    font-size: 0.85rem;
-    font-weight: 500;
+    border-radius: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.82rem;
+    font-weight: 600;
     transition: all 0.15s;
+    min-height: 44px;
   }
 
   .mobileBarBtnActive {
@@ -337,6 +346,6 @@
   /* Space so content doesn't hide behind bottom bar */
   .bottomSpacer {
     display: block;
-    height: 80px;
+    height: calc(60px + env(safe-area-inset-bottom));
   }
 }

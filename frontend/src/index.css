@@ -5,16 +5,31 @@
 }
 
 :root {
-  --brand: #e84c1e;
-  --brand-dark: #c93e14;
-  --bg: #0f0f0f;
-  --surface: #1a1a1a;
-  --surface-2: #242424;
-  --border: #2e2e2e;
-  --text: #f0f0f0;
-  --text-muted: #888;
+  /* Spacing scale (4pt base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Brand — orange-red, warm hue 35 */
+  --brand: oklch(57% 0.21 35);
+  --brand-dark: oklch(50% 0.21 35);
+
+  /* Neutrals — all tinted toward hue 50 (warm orange direction) */
+  --bg: oklch(10% 0.008 50);
+  --surface: oklch(14% 0.008 50);
+  --surface-2: oklch(19% 0.007 50);
+  --border: oklch(26% 0.006 50);
+  --text: oklch(95% 0.004 50);
+  --text-muted: oklch(58% 0.010 50);
+
   --radius: 10px;
-  --font: 'Inter', sans-serif;
+  --font: 'Figtree', sans-serif;
+  --font-display: 'Spectral', serif;
 }
 
 body {
@@ -23,6 +38,7 @@ body {
   color: var(--text);
   min-height: 100vh;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
 button {
@@ -35,10 +51,11 @@ input, select, textarea {
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--surface);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);

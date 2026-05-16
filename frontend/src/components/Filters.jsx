@@ -1,6 +1,7 @@
 import styles from './Filters.module.css'
 
 const PLAYER_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8]
+
 const TIME_OPTIONS = [
   { label: 'Cualquier tiempo', value: '' },
   { label: 'Hasta 15 min', value: '15' },
@@ -14,9 +15,40 @@ const SORT_OPTIONS = [
   { label: 'A–Z', value: 'title' },
   { label: 'Jugadores', value: 'players_min' },
   { label: 'Duración', value: 'playing_time' },
+  { label: 'Complejidad', value: 'bgg_weight' },
+]
+
+const COMPLEXITY_OPTIONS = [
+  { label: 'Cualquiera', value: '' },
+  { label: 'Fácil', value: 'easy' },
+  { label: 'Medio', value: 'medium' },
+  { label: 'Difícil', value: 'hard' },
+]
+
+const TAG_OPTIONS = [
+  'cooperativo',
+  'estrategia',
+  'party',
+  'familiar',
+  'cartas',
+  'dados',
+  'abstracto',
+  'deducción',
+  'economía',
+  'engaño',
+  'colocación de trabajadores',
+  'fantasía',
 ]
 
 export default function Filters({ filters, onChange }) {
+  const toggleTag = (tag) => {
+    const current = filters.tags || []
+    const next = current.includes(tag)
+      ? current.filter(t => t !== tag)
+      : [...current, tag]
+    onChange('tags', next)
+  }
+
   return (
     <div className={styles.sidebar}>
       <div className={styles.section}>
@@ -62,6 +94,36 @@ export default function Filters({ filters, onChange }) {
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
         </select>
+      </div>
+
+      <div className={styles.section}>
+        <label className={styles.label}>Complejidad</label>
+        <div className={styles.sortGroup}>
+          {COMPLEXITY_OPTIONS.map(o => (
+            <button
+              key={o.value}
+              className={`${styles.sortBtn} ${filters.complexity === o.value ? styles.sortBtnActive : ''}`}
+              onClick={() => onChange('complexity', o.value)}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.section}>
+        <label className={styles.label}>Categorías</label>
+        <div className={styles.tagGrid}>
+          {TAG_OPTIONS.map(tag => (
+            <button
+              key={tag}
+              className={`${styles.tagBtn} ${(filters.tags || []).includes(tag) ? styles.tagBtnActive : ''}`}
+              onClick={() => toggleTag(tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className={styles.section}>

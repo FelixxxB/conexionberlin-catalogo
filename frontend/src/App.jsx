@@ -8,6 +8,8 @@ const DEFAULT_FILTERS = {
   search: '',
   players: '',
   timeMax: '',
+  complexity: '',
+  tags: [],
   availableOnly: false,
   baseOnly: false,
   sort: 'title',
@@ -32,6 +34,12 @@ function applyFilters(allGames, f) {
     const t = parseInt(f.timeMax, 10)
     results = results.filter(g => g.playing_time != null && g.playing_time <= t)
   }
+  if (f.complexity === 'easy') results = results.filter(g => g.bgg_weight != null && g.bgg_weight <= 2)
+  else if (f.complexity === 'medium') results = results.filter(g => g.bgg_weight != null && g.bgg_weight > 2 && g.bgg_weight <= 3.5)
+  else if (f.complexity === 'hard') results = results.filter(g => g.bgg_weight != null && g.bgg_weight > 3.5)
+
+  if (f.tags?.length) results = results.filter(g => f.tags.some(t => g.tags?.includes(t)))
+
   if (f.availableOnly) results = results.filter(g => g.available)
   if (f.baseOnly) results = results.filter(g => !g.expansion)
 
@@ -39,6 +47,8 @@ function applyFilters(allGames, f) {
     results = [...results].sort((a, b) => (a.players_min ?? 999) - (b.players_min ?? 999))
   } else if (f.sort === 'playing_time') {
     results = [...results].sort((a, b) => (a.playing_time ?? 999) - (b.playing_time ?? 999))
+  } else if (f.sort === 'bgg_weight') {
+    results = [...results].sort((a, b) => (a.bgg_weight ?? 999) - (b.bgg_weight ?? 999))
   } else {
     results = [...results].sort((a, b) => (a.title || '').toLowerCase().localeCompare((b.title || '').toLowerCase()))
   }
@@ -86,8 +96,10 @@ export default function App() {
     filters.search,
     filters.players,
     filters.timeMax,
+    filters.complexity,
     filters.availableOnly,
     filters.baseOnly,
+    ...(filters.tags || []),
   ].filter(Boolean).length
 
   const handleFilterChange = (key, value) => {

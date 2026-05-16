@@ -151,6 +151,39 @@
   cursor: pointer;
 }
 
+.tagGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tagBtn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.74rem;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.tagBtn:hover {
+  border-color: var(--brand);
+  color: var(--text);
+}
+
+.tagBtnActive {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  font-weight: 600;
+}
+
+.tagBtnActive:hover {
+  color: #fff;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     position: static;

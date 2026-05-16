@@ -177,12 +177,7 @@ export default function App() {
             </button>
           </div>
 
-          {/* Mobile filters drawer */}
-          {showFilters && (
-            <div className={styles.mobileFilters}>
-              <Filters filters={filters} onChange={handleFilterChange} />
-            </div>
-          )}
+          {/* Mobile filters — full-screen overlay (handled below) */}
 
           {!loading && games.length === 0 && (
             <div className={styles.empty}>
@@ -249,6 +244,34 @@ export default function App() {
 
       {showAI && (
         <AIAssistant onClose={() => setShowAI(false)} allGames={allGames} />
+      )}
+
+      {showFilters && (
+        <div className={styles.filtersOverlay}>
+          <div className={styles.filtersPanel}>
+            <div className={styles.filtersPanelHeader}>
+              <span className={styles.filtersPanelTitle}>
+                Filtros {activeFilterCount > 0 && <span className={styles.filterBadge}>{activeFilterCount}</span>}
+              </span>
+              <div className={styles.filtersPanelActions}>
+                {activeFilterCount > 0 && (
+                  <button className={styles.filtersPanelClear} onClick={() => setFilters(DEFAULT_FILTERS)}>
+                    Limpiar
+                  </button>
+                )}
+                <button className={styles.filtersPanelClose} onClick={() => setShowFilters(false)}>✕</button>
+              </div>
+            </div>
+            <div className={styles.filtersPanelBody}>
+              <Filters filters={filters} onChange={handleFilterChange} />
+            </div>
+            <div className={styles.filtersPanelFooter}>
+              <button className={styles.filtersPanelApply} onClick={() => setShowFilters(false)}>
+                Ver {total.toLocaleString()} juegos
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

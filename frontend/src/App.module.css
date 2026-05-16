@@ -161,8 +161,8 @@
   margin: 0 var(--space-1);
 }
 
-/* Mobile filters drawer — hidden on desktop */
-.mobileFilters {
+/* Mobile filters overlay — hidden on desktop */
+.filtersOverlay {
   display: none;
 }
 
@@ -333,13 +333,95 @@
     font-weight: 500;
   }
 
-  .mobileFilters {
+  /* Mobile filters full-screen overlay */
+  .filtersOverlay {
     display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: oklch(8% 0.006 50 / 0.6);
+  }
+
+  .filtersPanel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 92dvh;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: var(--radius) var(--radius) 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .filtersPanelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-4) var(--space-3);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .filtersPanelTitle {
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .filtersPanelActions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .filtersPanelClear {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 0;
+  }
+
+  .filtersPanelClose {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .filtersPanelBody {
+    flex: 1;
+    overflow-y: auto;
     padding: var(--space-4);
-    margin-bottom: var(--space-4);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filtersPanelFooter {
+    padding: var(--space-3) var(--space-4);
+    padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .filtersPanelApply {
+    width: 100%;
+    background: var(--brand);
+    border: none;
+    color: #fff;
+    border-radius: var(--space-2);
+    padding: var(--space-3);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+
+  .filtersPanelApply:active {
+    background: var(--brand-dark);
   }
 
   .grid {

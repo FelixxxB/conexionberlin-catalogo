@@ -1,6 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
-
-const API = import.meta.env.VITE_API_URL || ''
+import { useState, useEffect, useMemo, useRef } from 'react'
 import GameCard from './components/GameCard'
 import Filters from './components/Filters'
 import AIAssistant from './components/AIAssistant'
@@ -17,16 +15,72 @@ const DEFAULT_FILTERS = {
 
 const LIMIT = 48
 
+function applyFilters(allGames, f) {
+  let results = allGames
+  if (f.search) {
+    const q = f.search.toLowerCase()
+    results = results.filter(g => (g.title || '').toLowerCase().includes(q))
+  }
+  if (f.players) {
+    const p = parseInt(f.players, 10)
+    results = results.filter(g =>
+      g.players_min != null && g.players_max != null &&
+      g.players_min <= p && p <= g.players_max
+    )
+  }
+  if (f.timeMax) {
+    const t = parseInt(f.timeMax, 10)
+    results = results.filter(g => g.playing_time != null && g.playing_time <= t)
+  }
+  if (f.availableOnly) results = results.filter(g => g.available)
+  if (f.baseOnly) results = results.filter(g => !g.expansion)
+
+  if (f.sort === 'players_min') {
+    results = [...results].sort((a, b) => (a.players_min ?? 999) - (b.players_min ?? 999))
+  } else if (f.sort === 'playing_time') {
+    results = [...results].sort((a, b) => (a.playing_time ?? 999) - (b.playing_time ?? 999))
+  } else {
+    results = [...results].sort((a, b) => (a.title || '').toLowerCase().localeCompare((b.title || '').toLowerCase()))
+  }
+  return results
+}
+
 export default function App() {
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
-  const [games, setGames] = useState([])
-  const [total, setTotal] = useState(0)
+  const [allGames, setAllGames] = useState([])
   const [offset, setOffset] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [stats, setStats] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [showAI, setShowAI] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
   const debounceRef = useRef(null)
+
+  useEffect(() => {
+    fetch('/games.json')
+      .then(r => r.json())
+      .then(data => { setAllGames(data); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [])
+
+  const filtered = useMemo(() => applyFilters(allGames, filters), [allGames, filters])
+
+  const stats = useMemo(() => {
+    if (!allGames.length) return null
+    const expansions = allGames.filter(g => g.expansion).length
+    return {
+      total: allGames.length,
+      available: allGames.filter(g => g.available).length,
+      base_games: allGames.length - expansions,
+    }
+  }, [allGames])
+
+  const games = useMemo(() => filtered.slice(offset, offset + LIMIT), [filtered, offset])
+  const total = filtered.length
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => setOffset(0), 0)
+    return () => clearTimeout(debounceRef.current)
+  }, [filters])
 
   const activeFilterCount = [
     filters.search,
@@ -36,52 +90,11 @@ export default function App() {
     filters.baseOnly,
   ].filter(Boolean).length
 
-  const fetchGames = useCallback(async (f, off) => {
-    setLoading(true)
-    const params = new URLSearchParams()
-    if (f.search) params.set('search', f.search)
-    if (f.players) params.set('players', f.players)
-    if (f.timeMax) params.set('time_max', f.timeMax)
-    if (f.availableOnly) params.set('available_only', 'true')
-    if (f.baseOnly) params.set('base_only', 'true')
-    if (f.sort) params.set('sort', f.sort)
-    params.set('limit', LIMIT)
-    params.set('offset', off)
-
-    try {
-      const res = await fetch(`${API}/api/games?${params}`)
-      const data = await res.json()
-      setGames(data.games)
-      setTotal(data.total)
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetch(`${API}/api/stats`).then(r => r.json()).then(setStats).catch(() => {})
-  }, [])
-
-  useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current)
-    debounceRef.current = setTimeout(() => {
-      setOffset(0)
-      fetchGames(filters, 0)
-    }, 250)
-    return () => clearTimeout(debounceRef.current)
-  }, [filters, fetchGames])
-
-  useEffect(() => {
-    fetchGames(filters, offset)
-  }, [offset]) // eslint-disable-line
-
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }))
   }
 
-  const totalPages = Math.ceil(total / LIMIT)
+  const totalPages = Math.ceil(filtered.length / LIMIT)
   const currentPage = Math.floor(offset / LIMIT) + 1
 
   return (
@@ -207,7 +220,7 @@ export default function App() {
       </nav>
 
       {showAI && (
-        <AIAssistant onClose={() => setShowAI(false)} />
+        <AIAssistant onClose={() => setShowAI(false)} allGames={allGames} />
       )}
     </div>
   )

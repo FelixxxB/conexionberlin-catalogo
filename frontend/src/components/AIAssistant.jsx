@@ -1,12 +1,56 @@
 import { useState, useRef, useEffect } from 'react'
 import styles from './AIAssistant.module.css'
 
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || ''
+const GEMINI_MODEL = 'gemini-2.0-flash-lite'
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`
+
 const SUGGESTIONS = [
   'Juegos para 4 personas, menos de 30 min',
   'Me gustó Catan, ¿qué más recomendás?',
   'Juegos cooperativos para 2 jugadores',
   'El mejor juego de estrategia para principiantes',
 ]
+
+function buildCatalogContext(allGames) {
+  const lines = []
+  for (const g of allGames) {
+    if (!g.available) continue
+    let p = ''
+    if (g.players_min && g.players_max) p = `${g.players_min}-${g.players_max}j`
+    else if (g.players_min) p = `${g.players_min}j+`
+    const t = g.playing_time ? `${g.playing_time}min` : ''
+    const exp = g.expansion ? ' [exp]' : ''
+    lines.push(`- ${g.title} (${p}, ${t}${exp})`)
+    if (lines.length >= 500) break
+  }
+  return lines.join('\n')
+}
+
+function matchGamesByTitles(titles, allGames) {
+  const byTitle = {}
+  for (const g of allGames) byTitle[g.title.toLowerCase()] = g
+
+  const results = []
+  const seen = new Set()
+  for (const title of titles) {
+    const key = title.toLowerCase().trim()
+    let game = byTitle[key]
+    if (!game) {
+      for (const [catalogKey, g] of Object.entries(byTitle)) {
+        if (key.includes(catalogKey) || catalogKey.includes(key)) {
+          game = g
+          break
+        }
+      }
+    }
+    if (game && !seen.has(game.id)) {
+      results.push(game)
+      seen.add(game.id)
+    }
+  }
+  return results
+}
 
 function GameCarousel({ games }) {
   if (!games || games.length === 0) return null
@@ -53,7 +97,7 @@ function GameCarousel({ games }) {
   )
 }
 
-export default function AIAssistant({ onClose }) {
+export default function AIAssistant({ onClose, allGames = [] }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -75,28 +119,75 @@ export default function AIAssistant({ onClose }) {
     setInput('')
     setLoading(true)
 
+    if (!GEMINI_API_KEY) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        text: 'Configurá la variable VITE_GEMINI_API_KEY para activar el asistente.',
+        games: [],
+      }])
+      setLoading(false)
+      return
+    }
+
     try {
-      const API = import.meta.env.VITE_API_URL || ''
-      const res = await fetch(`${API}/api/ai/query`, {
+      const catalogText = buildCatalogContext(allGames)
+      const systemPrompt = `Eres un experto en juegos de mesa del café Conexión Berlín en Buenos Aires.
+Ayudás a los clientes a encontrar juegos de mesa según sus preferencias.
+
+El catálogo de juegos disponibles (formato: nombre, jugadores, tiempo, [exp]=expansión):
+${catalogText}
+
+INSTRUCCIONES DE RESPUESTA:
+Respondé SIEMPRE con un objeto JSON válido con esta estructura exacta:
+{
+  "text": "Tu respuesta conversacional en español, amigable y concisa",
+  "recommendations": ["Título exacto del juego 1", "Título exacto del juego 2", ...]
+}
+
+- "text": tu respuesta en lenguaje natural, sin listar los juegos de nuevo (las tarjetas se muestran aparte)
+- "recommendations": lista de títulos EXACTOS del catálogo (copiados tal cual aparecen arriba). Solo incluir si estás recomendando juegos. Lista vacía [] si no aplica.
+
+Reglas:
+- Sugerí 3-6 juegos que mejor se ajusten al pedido
+- Solo recomendá juegos del catálogo
+- Si el usuario hace pregunta general, respondé sin recomendaciones`
+
+      const res = await fetch(GEMINI_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text }),
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt }] },
+          contents: [{ role: 'user', parts: [{ text }] }],
+          generationConfig: {
+            responseMimeType: 'application/json',
+            maxOutputTokens: 1024,
+          },
+        }),
       })
+
       const data = await res.json()
-      if (data.detail) {
-        const msg = data.detail.includes('GEMINI_API_KEY')
-          ? 'Configurá la variable GEMINI_API_KEY en el servidor para activar el asistente.\n\nexport GEMINI_API_KEY=AIzaSy...'
-          : `Error: ${data.detail}`
-        setMessages(prev => [...prev, { role: 'assistant', text: msg, games: [] }])
-      } else {
-        setMessages(prev => [...prev, {
-          role: 'assistant',
-          text: data.response,
-          games: data.games || [],
-        }])
+      if (!res.ok) {
+        throw new Error(data.error?.message || `HTTP ${res.status}`)
       }
-    } catch {
-      setMessages(prev => [...prev, { role: 'assistant', text: 'Error al conectar con el asistente.', games: [] }])
+
+      const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
+      let responseText = raw
+      let games = []
+      try {
+        const parsed = JSON.parse(raw)
+        responseText = parsed.text || raw
+        games = matchGamesByTitles(parsed.recommendations || [], allGames)
+      } catch {
+        // raw text response, no recommendations
+      }
+
+      setMessages(prev => [...prev, { role: 'assistant', text: responseText, games }])
+    } catch (err) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        text: `Error al conectar con el asistente: ${err.message}`,
+        games: [],
+      }])
     } finally {
       setLoading(false)
     }

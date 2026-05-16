@@ -9,6 +9,7 @@ const DEFAULT_FILTERS = {
   players: '',
   timeMax: '',
   complexity: '',
+  location: '',
   tags: [],
   availableOnly: false,
   baseOnly: false,
@@ -34,6 +35,8 @@ function applyFilters(allGames, f) {
     const t = parseInt(f.timeMax, 10)
     results = results.filter(g => g.playing_time != null && g.playing_time <= t)
   }
+  if (f.location) results = results.filter(g => g.locations?.includes(f.location))
+
   if (f.complexity === 'easy') results = results.filter(g => g.bgg_weight != null && g.bgg_weight <= 2)
   else if (f.complexity === 'medium') results = results.filter(g => g.bgg_weight != null && g.bgg_weight > 2 && g.bgg_weight <= 3.5)
   else if (f.complexity === 'hard') results = results.filter(g => g.bgg_weight != null && g.bgg_weight > 3.5)
@@ -97,6 +100,7 @@ export default function App() {
     filters.players,
     filters.timeMax,
     filters.complexity,
+    filters.location,
     filters.availableOnly,
     filters.baseOnly,
     ...(filters.tags || []),

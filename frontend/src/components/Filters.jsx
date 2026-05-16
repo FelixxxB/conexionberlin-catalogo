@@ -25,6 +25,13 @@ const COMPLEXITY_OPTIONS = [
   { label: 'Difícil', value: 'hard' },
 ]
 
+const LOCATION_OPTIONS = [
+  { label: 'Todas', value: '' },
+  { label: 'Recoleta', value: 'recoleta' },
+  { label: 'Olivos', value: 'olivos' },
+  { label: 'Pedro', value: 'pedro' },
+]
+
 const TAG_OPTIONS = [
   'cooperativo',
   'estrategia',
@@ -104,6 +111,21 @@ export default function Filters({ filters, onChange }) {
               key={o.value}
               className={`${styles.sortBtn} ${filters.complexity === o.value ? styles.sortBtnActive : ''}`}
               onClick={() => onChange('complexity', o.value)}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.section}>
+        <label className={styles.label}>Sede</label>
+        <div className={styles.sortGroup}>
+          {LOCATION_OPTIONS.map(o => (
+            <button
+              key={o.value}
+              className={`${styles.sortBtn} ${filters.location === o.value ? styles.sortBtnActive : ''}`}
+              onClick={() => onChange('location', o.value)}
             >
               {o.label}
             </button>

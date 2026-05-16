@@ -1,0 +1,342 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerInner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.brandDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--brand);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statNum {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.statLabel {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.aiToggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.aiToggle:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.aiToggleActive {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.aiToggleActive:hover {
+  background: var(--brand-dark);
+  color: #fff;
+}
+
+/* Body */
+.body {
+  flex: 1;
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 24px;
+  gap: 24px;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.resultsBar {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.resultCount {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Mobile filter toggle — hidden on desktop */
+.filterToggle {
+  display: none;
+}
+
+.filterBadge {
+  background: var(--brand);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  margin: 0 2px;
+}
+
+/* Mobile filters drawer — hidden on desktop */
+.mobileFilters {
+  display: none;
+}
+
+.empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 16px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.pageBtn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.pageBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.pageInfo {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Mobile bottom bar — hidden on desktop */
+.mobileBar {
+  display: none;
+}
+
+.bottomSpacer {
+  display: none;
+}
+
+/* ─── Mobile ──────────────────────────────── */
+@media (max-width: 768px) {
+  .headerInner {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .title {
+    font-size: 0.95rem;
+  }
+
+  .subtitle {
+    font-size: 0.7rem;
+  }
+
+  .stats {
+    display: none;
+  }
+
+  /* Hide desktop AI button on mobile (bottom bar handles it) */
+  .aiToggle {
+    display: none;
+  }
+
+  .body {
+    flex-direction: column;
+    padding: 12px 12px 0;
+    gap: 0;
+  }
+
+  /* Hide desktop sidebar on mobile */
+  .sidebar {
+    display: none;
+  }
+
+  .resultsBar {
+    margin-bottom: 12px;
+  }
+
+  .resultCount {
+    font-size: 0.8rem;
+  }
+
+  .filterToggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .mobileFilters {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .pagination {
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .pageBtn {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+  }
+
+  /* Sticky bottom action bar */
+  .mobileBar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    z-index: 200;
+    padding: 10px 16px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    gap: 10px;
+  }
+
+  .mobileBarBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  .mobileBarBtnActive {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+  }
+
+  /* Space so content doesn't hide behind bottom bar */
+  .bottomSpacer {
+    display: block;
+    height: 80px;
+  }
+}

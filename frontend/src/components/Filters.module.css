@@ -1,0 +1,167 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 80px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.input:focus {
+  border-color: var(--brand);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.playerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.playerBtn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 6px 4px;
+  font-size: 0.8rem;
+  transition: all 0.15s;
+}
+
+.playerBtn:hover {
+  border-color: var(--brand);
+  color: var(--text);
+}
+
+.playerBtnActive {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  font-weight: 600;
+}
+
+.playerBtnActive:hover {
+  color: #fff;
+}
+
+.select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+.select:focus {
+  border-color: var(--brand);
+}
+
+.select option {
+  background: var(--surface);
+}
+
+.sortGroup {
+  display: flex;
+  gap: 6px;
+}
+
+.sortBtn {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 6px 4px;
+  font-size: 0.78rem;
+  transition: all 0.15s;
+}
+
+.sortBtn:hover {
+  border-color: var(--brand);
+  color: var(--text);
+}
+
+.sortBtnActive {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  font-weight: 600;
+}
+
+.sortBtnActive:hover {
+  color: #fff;
+}
+
+.checkGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.checkLabel:hover {
+  color: var(--text);
+}
+
+.check {
+  accent-color: var(--brand);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: static;
+    gap: 14px;
+  }
+
+  .playerGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .sortGroup {
+    flex-wrap: nowrap;
+  }
+}
